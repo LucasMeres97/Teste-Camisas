@@ -317,15 +317,115 @@
   .size-table tr:hover td { background: rgba(245,208,0,0.05); }
   .size-table td:first-child { font-weight: 700; color: var(--amarelo); }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    header { padding: 20px; }
-    .header-text h1 { font-size: 2rem; }
-    .tabs { padding: 0 20px; }
-    .section { padding: 20px; }
-    .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
-    .counter-bar { padding: 12px 20px; gap: 16px; flex-wrap: wrap; }
+
+
+  /* ── PRICE ── */
+  .card-price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: linear-gradient(135deg, rgba(245,208,0,0.12), rgba(245,208,0,0.05));
+    border: 1px solid rgba(245,208,0,0.25);
+    border-radius: 6px;
   }
+  .price-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--amarelo);
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+  .price-cents {
+    font-size: 0.9rem;
+    vertical-align: super;
+  }
+  .price-installment {
+    font-size: 0.65rem;
+    color: var(--texto-muted);
+    text-align: right;
+    line-height: 1.3;
+  }
+  .price-installment strong {
+    color: var(--verde);
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    padding: 14px 40px;
+    background: var(--cinza-escuro);
+    border-bottom: 1px solid var(--cinza-borda);
+  }
+  .search-input {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px 16px 10px 42px;
+    background: var(--cinza);
+    border: 1px solid var(--cinza-borda);
+    border-radius: 8px;
+    color: var(--texto);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.868-3.833zm-5.242 1.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 14px center;
+  }
+  .search-input:focus { border-color: var(--amarelo); }
+  .search-input::placeholder { color: var(--texto-muted); }
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--texto-muted);
+    font-size: 1rem;
+  }
+
+  /* ── WHATSAPP BUTTON ── */
+  .btn-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    width: 100%;
+    padding: 13px;
+    background: #25D366;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-whatsapp:hover { background: #1ebe5d; }
+  .btn-whatsapp svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
+
+  /* ── MOBILE MELHORADO ── */
+  @media (max-width: 600px) {
+    header { padding: 14px 16px; gap: 12px; }
+    .header-text h1 { font-size: 1.6rem; letter-spacing: 2px; }
+    .header-text p { font-size: 0.7rem; }
+    .flag-strip { width: 5px; height: 40px; }
+    .search-wrap { padding: 10px 16px; }
+    .tabs { padding: 0 8px; }
+    .tab { padding: 12px 12px; font-size: 0.82rem; letter-spacing: 1px; }
+    .section { padding: 14px; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .counter-bar { padding: 10px 16px; gap: 10px; flex-wrap: wrap; font-size: 0.75rem; }
+    .card-name { font-size: 0.8rem; }
+    .detail-pill { font-size: 0.65rem; padding: 2px 6px; }
+    .modal { border-radius: 12px 12px 0 0; position: fixed; bottom: 0; left: 0; right: 0; max-width: 100%; margin: 0; }
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal-body { padding: 16px; }
+    .modal-name { font-size: 1.3rem; }
+    .size-grid { grid-template-columns: 1fr; }
+  }
+
 </style>
 </head>
 <body>
@@ -354,6 +454,9 @@
   <div class="counter-item">Retrô/Treino: <span id="retro-count">0</span></div>
 </div>
 
+<div class="search-wrap">
+  <input class="search-input" type="text" id="search-input" placeholder="🔍  Buscar camisa... ex: 1998, azul, jogador, retro" oninput="filterCards(this.value)">
+</div>
 <div class="tabs">
   <button class="tab active" onclick="showTab('todas')">Todas</button>
   <button class="tab" onclick="showTab('jogador')">⚽ Versão Jogador</button>
@@ -364,6 +467,7 @@
 </div>
 <div class="section active" id="tab-todas">
   <div id="grid-todas" class="grid"></div>
+  <div id="no-results" class="no-results" style="display:none">😕 Nenhuma camisa encontrada para "<span id="no-results-q"></span>"</div>
 </div>
 
 <!-- JOGADOR -->
@@ -477,7 +581,12 @@
       <div id="modal-badge"></div>
       <div class="modal-name" id="modal-name"></div>
       <div class="modal-details" id="modal-details"></div>
-      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">Fechar</button>
+      <div id="modal-price"></div>
+      <a id="modal-whatsapp" class="btn-whatsapp" href="#" target="_blank" style="margin-top:10px">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Tenho Interesse
+      </a>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')" style="margin-top:8px">Fechar</button>
     </div>
   </div>
 </div>
@@ -721,7 +830,24 @@ jerseys.push(
   { cat:'retro', badge:'badge-retro', badgeLabel:'Retrô', name:'Brasil 2014 — Away Retrô', details:'Azul · Listras Horizontais · Gola V · Manga Curta · Nike', img:'WhatsApp Image 2026-03-30 at 18.58.06.jpeg' }
 );
 
+
+function getPrice(j) {
+  // Manga longa = R$219,90
+  if (j.details.toLowerCase().includes('manga longa')) return { full: '219', cents: '90', installment: '4x R$ 57,47' };
+  // Jogador = R$199,90
+  if (j.cat === 'jogador') return { full: '199', cents: '90', installment: '4x R$ 52,47' };
+  // Retrô = R$159,90
+  if (j.cat === 'retro') return { full: '159', cents: '90', installment: '3x R$ 53,30' };
+  // Feminino = R$149,90
+  if (j.cat === 'feminino') return { full: '149', cents: '90', installment: '3x R$ 49,97' };
+  // Torcedor = R$149,90
+  return { full: '149', cents: '90', installment: '3x R$ 49,97' };
+}
+
 function buildCard(j, idx) {
+  const p = getPrice(j);
+  const waMsg = encodeURIComponent(`Olá! Tenho interesse na camisa: ${j.name} (${j.details.split('·')[0].trim()}). Poderia me passar mais informações?`);
+  const waUrl = `https://wa.me/5511965798257?text=${waMsg}`;
   return `
     <div class="card" onclick="openModal(${idx})">
       <div class="card-img-wrap"><img class="card-img" src="${j.img}" alt="${j.name}" loading="lazy" onerror="this.style.background='#222'"></div>
@@ -731,6 +857,14 @@ function buildCard(j, idx) {
         <div class="card-detail">
           ${j.details.split('·').map(d => `<span class="detail-pill">${d.trim()}</span>`).join('')}
         </div>
+        <div class="card-price">
+          <div class="price-value">R$&nbsp;${p.full}<span class="price-cents">,${p.cents}</span></div>
+          <div class="price-installment">ou <strong>${p.installment}</strong><br>sem juros</div>
+        </div>
+        <a class="btn-whatsapp" href="${waUrl}" target="_blank" onclick="event.stopPropagation()">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          Tenho Interesse
+        </a>
       </div>
     </div>`;
 }
@@ -778,6 +912,11 @@ function openModal(idx) {
   document.getElementById('modal-badge').innerHTML = `<span class="card-badge ${j.badge}">${j.badgeLabel}</span>`;
   document.getElementById('modal-name').textContent = j.name;
   document.getElementById('modal-details').innerHTML = j.details.split('·').map(d => `• ${d.trim()}`).join('<br>');
+  const mp = getPrice(j);
+  document.getElementById('modal-price').innerHTML = `<div class="card-price" style="margin:12px 0"><div class="price-value">R$&nbsp;${mp.full}<span class="price-cents">,${mp.cents}</span></div><div class="price-installment">ou <strong>${mp.installment}</strong><br>sem juros</div></div>`;
+  const p = getPrice(j);
+  const waMsg = encodeURIComponent(`Olá! Tenho interesse na camisa: ${j.name} (${j.details.split('·')[0].trim()}). Poderia me passar mais informações?`);
+  document.getElementById('modal-whatsapp').href = `https://wa.me/5511965798257?text=${waMsg}`;
   document.getElementById('modal').classList.add('open');
 }
 
@@ -786,6 +925,20 @@ function closeModal(e) {
 }
 
 renderGrids();
+
+function filterCards(query) {
+  const q = query.toLowerCase().trim();
+  const allCards = document.querySelectorAll('#tab-todas .card');
+  let visible = 0;
+  allCards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    const show = !q || text.includes(q);
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  const noRes = document.getElementById('no-results');
+  if (noRes) noRes.style.display = visible === 0 ? 'block' : 'none';
+}
 </script>
 </body>
 </html>
