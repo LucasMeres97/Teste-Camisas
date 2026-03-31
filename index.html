@@ -723,7 +723,7 @@ jerseys.push(
 function buildCard(j, idx) {
   return `
     <div class="card" onclick="openModal(${idx})">
-      <div class="card-img-wrap"><img class="card-img" src="imgs/${j.img}" alt="${j.name}" loading="lazy" onerror="this.style.background='#222'"></div>
+      <div class="card-img-wrap"><img class="card-img" src="${j.img}" alt="${j.name}" loading="lazy" onerror="this.style.background='#222'"></div>
       <div class="card-body">
         <span class="card-badge ${j.badge}">${j.badgeLabel}</span>
         <div class="card-name">${j.name}</div>
@@ -773,7 +773,7 @@ function showTab(tab) {
 
 function openModal(idx) {
   const j = jerseys[idx];
-  document.getElementById('modal-img').src = 'imgs/' + j.img;
+  document.getElementById('modal-img').src = j.img;
   document.getElementById('modal-badge').innerHTML = `<span class="card-badge ${j.badge}">${j.badgeLabel}</span>`;
   document.getElementById('modal-name').textContent = j.name;
   document.getElementById('modal-details').innerHTML = j.details.split('·').map(d => `• ${d.trim()}`).join('<br>');
